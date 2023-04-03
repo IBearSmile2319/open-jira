@@ -3,6 +3,8 @@ import { Card, CardActionArea, CardActions, CardContent, Typography } from "@mui
 import React from "react";
 import { useContext } from 'react';
 import { UIContext } from '.';
+import { useRouter } from "next/router";
+import { dateFunctions } from '@/utils';
 interface Props {
   entry: Entry;
 }
@@ -12,6 +14,8 @@ const EntryCard = ({ entry }: Props) => {
     startDragging,
     stopDragging,
   } = useContext(UIContext)
+
+  const router = useRouter();
 
   const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     // TODO: modificar el estado, para que sepa que se esta arrastrando
@@ -24,6 +28,10 @@ const EntryCard = ({ entry }: Props) => {
     stopDragging();
   }
 
+  const onClick = () => {
+    router.push(`/entries/${entry._id}`);
+  }
+
   return (
     <Card
       sx={{
@@ -33,6 +41,7 @@ const EntryCard = ({ entry }: Props) => {
       draggable={true}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onClick={onClick}
     >
       <CardActionArea>
         <CardContent>
@@ -43,9 +52,10 @@ const EntryCard = ({ entry }: Props) => {
         <CardActions sx={{ display: "flex", justifyContent: "end", paddingRight: 2 }}>
           <Typography variant="body2" >
             {/* hace 1 minuto  */}
-            {
+            {/* {
               new Date(entry.createdAt).toLocaleString().split(",")[0]
-            }
+            } */}
+            {dateFunctions.getFormatDistanceToNow(entry.createdAt)}
           </Typography>
         </CardActions>
       </CardActionArea>
